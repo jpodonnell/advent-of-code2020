@@ -1,5 +1,10 @@
 Passports
 /*
+inputing file
+sed 's/^$/thisisanewline/g' passports_2.input > passports_thisisanewline.input
+cat passports_thisisanewline.input | tr -d '\n' > passports_oneline.input
+cat passports_oneline.input | awk -F'thisisanewline' '{$1=$1}1' OFS='\n' | awk ' { print "("$0")," } ' | sed "s/(/('/g" | sed "s/)/')/g" > passports_sql.input
+
 byr (Birth Year) - four digits; at least 1920 and at most 2002. isnumeric
 iyr (Issue Year) - four digits; at least 2010 and at most 2020. isnumeric
 eyr (Expiration Year) - four digits; at least 2020 and at most 2030. isnumeric
