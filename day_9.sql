@@ -48,3 +48,38 @@ select @sum
 end
 
 exec validate_xmas_code
+
+alter function find_numbers(@input bigint) --need to figure out how to move the new sum
+returns varchar(1000)
+as
+begin
+declare @numbers varchar(1000) = ''
+declare @start_loc int = 1
+declare @end_loc int = 2
+declare @sum bigint 
+select @sum = number from jp_test_xmas_code where id = @start_loc
+select @sum = @sum + number from jp_test_xmas_code where id = @end_loc
+while @sum != @input
+begin
+	  select @end_loc = @end_loc + 1
+	  select @sum = @sum + number from jp_test_xmas_code where id = @end_loc
+	  if @sum = @input
+	  begin --get the smallest and largest number from the set of numbers
+		select @numbers = convert(varchar(50),min(number)) from jp_test_xmas_code where id between @start_loc and @end_loc
+		select @numbers = @numbers + '  ' + convert(varchar(50),max(number)) from jp_test_xmas_code where id between @start_loc and @end_loc
+	  end
+	  while ( @sum > @input)
+	  begin
+		select @sum = @sum - number from jp_test_xmas_code where id = @start_loc
+		select @start_loc = @start_loc + 1
+		if @sum = @input
+	  begin
+		select @numbers = convert(varchar(50),min(number)) from jp_test_xmas_code where id between @start_loc and @end_loc
+		select @numbers = @numbers + '  ' + convert(varchar(50),max(number)) from jp_test_xmas_code where id between @start_loc and @end_loc
+	  end
+	  end
+end
+return @numbers
+end
+
+select cmmdba.dbo.find_numbers(542529149)
