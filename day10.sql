@@ -32,3 +32,7 @@ close volt_diff;
 deallocate volt_diff;
 
 select (@one_jolt_diff + 1) * (@three_jolt_diff + 1) --the plus one to include your device and the wall device
+
+insert into jp_test_joltages(joltage) values(0)
+select mAx(joltage) from jp_test_joltages
+insert into jp_test_joltages(joltage) values(195)
